@@ -6,13 +6,16 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.graphics.Color;
 import android.graphics.PixelFormat;
 import android.os.IBinder;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 import android.view.Gravity;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnTouchListener;
 import android.view.WindowManager;
 import android.widget.TextView;
 import cn.itcast.lost.db.dao.AddressDao;
@@ -30,6 +33,7 @@ public class AddressService extends Service {
 	private WindowManager mWM;
 	private View view;
 	private SharedPreferences mPref;
+	private WindowManager.LayoutParams params;
 
 	@Override
 	public IBinder onBind(Intent arg0) {
@@ -96,15 +100,17 @@ public class AddressService extends Service {
 	public void showToast(String message){
 		
 		mWM = (WindowManager) this.getSystemService(Context.WINDOW_SERVICE);
-
-		WindowManager.LayoutParams params = new WindowManager.LayoutParams();
+		
+		final int winWidth=mWM.getDefaultDisplay().getWidth();
+		int winHeight=mWM.getDefaultDisplay().getHeight();
+		
+		params = new WindowManager.LayoutParams();
 		params.height = WindowManager.LayoutParams.WRAP_CONTENT;
 		params.width = WindowManager.LayoutParams.WRAP_CONTENT;
 		params.flags = WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
-				| WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE
 				| WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON;
 		params.format = PixelFormat.TRANSLUCENT;
-		params.type = WindowManager.LayoutParams.TYPE_TOAST;
+		params.type = WindowManager.LayoutParams.TYPE_PHONE;//电话窗口、它用于电话交互(特别是呼入)、它位于所有应用程序之上
 		params.setTitle("Toast");
 		params.gravity=Gravity.LEFT+Gravity.TOP;//将重心设置为左上方，将(0,0)改为从左上方开始
 		int lastX=mPref.getInt("lastX", 0);
@@ -120,6 +126,62 @@ public class AddressService extends Service {
 		int []bgs=new int[]{R.drawable.call_locate_white,R.drawable.call_locate_orange,R.drawable.call_locate_blue,R.drawable.call_locate_gray,R.drawable.call_locate_green};
 		int style=mPref.getInt("addressStyle",0);
 		view.setBackgroundResource(bgs[style]);//设置归属地弹框的背景
+		
+		view.setOnTouchListener(new OnTouchListener() {
+			
+			private int startX;
+			private int startY;
+
+			@Override
+			public boolean onTouch(View v, MotionEvent event) {
+				switch(event.getAction()){
+				case MotionEvent.ACTION_DOWN:
+					//初始化起点坐标
+					startX=(int) event.getRawX();
+					startY=(int) event.getRawY();
+					break;
+				case MotionEvent.ACTION_MOVE:
+					int endX=(int) event.getRawX();
+					int	endY=(int) event.getRawY();
+						
+					//计算移动偏移量
+					int dx=endX-startX;
+					int dy=endY-startY;
+					
+					//更新浮窗位置
+					params.x+=dx;
+					params.y+=dy;
+					
+					//防止坐标偏里屏幕
+					if(params.x<0){
+						params.x=0;
+					}
+					if(params.y<0){
+						params.y=0;
+					}
+					if(params.x>winWidth-view.getWidth()){
+						params.x=winWidth-view.getWidth();
+					}
+					if(params.y>winWidth-view.getHeight()){
+						params.y=winWidth-view.getHeight();
+					}
+					
+					mWM.updateViewLayout(view, params);
+					
+					//重新初始化起点坐标
+					startX=(int) event.getRawX();
+					startY=(int) event.getRawY();
+					break;
+				case MotionEvent.ACTION_UP:
+					Editor editor=mPref.edit();
+					editor.putInt("lastX", params.x);
+					editor.putInt("lastY", params.y);
+					editor.commit();
+					break;
+				}
+				return true;
+			}
+		});
 		
 		TextView tView=(TextView) view.findViewById(R.id.tv_number);
 		

@@ -4,8 +4,10 @@ import android.app.Activity;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -24,10 +26,8 @@ public class DragViewActivity extends Activity {
 	protected int startY;
 	protected int startX;
 	private SharedPreferences mPref;
-	private int winWidth;
-	private int winHeight;
+	long[] mHits = new long[2];// 数组长度表示要点击的次数
 	
-	@SuppressWarnings("deprecation")
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -47,8 +47,8 @@ public class DragViewActivity extends Activity {
 		//ivDrag.layout(lastX, lastY, lastX+ivDrag.getWidth(),lastY+ivDrag.getHeight());
 		//因为测量未完成，所以此方法不可用	
 		
-		winWidth = getWindowManager().getDefaultDisplay().getWidth();
-		winHeight= getWindowManager().getDefaultDisplay().getHeight();
+		 final int winWidth = getWindowManager().getDefaultDisplay().getWidth();
+		 final int winHeight= getWindowManager().getDefaultDisplay().getHeight();
 		
 		if(lastY>winHeight/2){//一边显示，一边隐藏
 			tvTop.setVisibility(View.VISIBLE);
@@ -63,6 +63,22 @@ public class DragViewActivity extends Activity {
 		layoutParams.topMargin=lastY;//设置上边距
 		ivDrag.setLayoutParams(layoutParams);//重新设置位置
 			
+		ivDrag.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				System.arraycopy(mHits, 1, mHits, 0, mHits.length - 1);
+				mHits[mHits.length - 1] = SystemClock.uptimeMillis();// 开机后开始计算的时间
+				if (mHits[0] >= (SystemClock.uptimeMillis() - 500)) {
+					// 把图片居中
+					ivDrag.layout(winWidth / 2 - ivDrag.getWidth() / 2,
+							ivDrag.getTop(), winWidth / 2 + ivDrag.getWidth()
+									/ 2, ivDrag.getBottom());
+				}
+			}
+		});
+		
+		//设置触摸监听
 		ivDrag.setOnTouchListener(new OnTouchListener() {
 			
 			@Override
@@ -117,7 +133,7 @@ public class DragViewActivity extends Activity {
 				default:
 					break;
 				}
-				return true;
+				return false;//事件要往下传递，让onclick事件响应
 			}
 		});
 	}

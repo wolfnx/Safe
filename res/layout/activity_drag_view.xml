@@ -27,9 +27,8 @@
         android:layout_centerHorizontal="true"
         android:gravity="center"
         android:background="@drawable/call_locate_blue"
-        android:layout_marginTop="18dp"
         android:textColor="@color/black"
-        android:padding="15dp"
+        android:padding="10dp"
         android:textSize="18sp"
         android:text="按住提示框拖到任意位置\n，按返回键立即生效" />
     
