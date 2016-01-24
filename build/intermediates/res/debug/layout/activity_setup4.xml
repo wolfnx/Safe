@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?><LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:itcast="http://schemas.android.com/apk/res/cn.itcast.safe"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <TextView
+        style="@style/TitleStyle"
+        android:text="4.恭喜你,设置完成" />
+
+        
+        <CheckBox 
+            android:id="@+id/cb_protect"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="没有开启防盗保护"
+            android:layout_marginLeft="5dp"
+            />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal" >
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@android:drawable/presence_invisible" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@android:drawable/presence_invisible" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@android:drawable/presence_invisible" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@android:drawable/presence_online" />
+    </LinearLayout>
+
+   <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" >
+
+        <ImageView
+            android:id="@+id/imageView1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:src="@drawable/setup3" />
+        
+        <Button 
+            style="@style/PreviousStyle"
+            android:background="@drawable/button"/>
+        
+        <Button 
+            android:text="设置完成"
+            style="@style/NextStyle"
+            android:background="@drawable/button"/>
+
+     
+    </RelativeLayout>
+
+</LinearLayout><!-- From: file:/D:/Develop/AndroidStudio/Safe/res/layout/activity_setup4.xml -->

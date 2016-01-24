@@ -102,7 +102,7 @@ public class AddressService extends Service {
 		mWM = (WindowManager) this.getSystemService(Context.WINDOW_SERVICE);
 		
 		final int winWidth=mWM.getDefaultDisplay().getWidth();
-		int winHeight=mWM.getDefaultDisplay().getHeight();
+		final int winHeight=mWM.getDefaultDisplay().getHeight();
 		
 		params = new WindowManager.LayoutParams();
 		params.height = WindowManager.LayoutParams.WRAP_CONTENT;
@@ -126,6 +126,11 @@ public class AddressService extends Service {
 		int []bgs=new int[]{R.drawable.call_locate_white,R.drawable.call_locate_orange,R.drawable.call_locate_blue,R.drawable.call_locate_gray,R.drawable.call_locate_green};
 		int style=mPref.getInt("addressStyle",0);
 		view.setBackgroundResource(bgs[style]);//设置归属地弹框的背景
+		
+		TextView tView=(TextView) view.findViewById(R.id.tv_number);
+		
+		tView.setText(message);
+		mWM.addView(view, params);//将view添加到屏幕上
 		
 		view.setOnTouchListener(new OnTouchListener() {
 			
@@ -162,8 +167,8 @@ public class AddressService extends Service {
 					if(params.x>winWidth-view.getWidth()){
 						params.x=winWidth-view.getWidth();
 					}
-					if(params.y>winWidth-view.getHeight()){
-						params.y=winWidth-view.getHeight();
+					if(params.y>winHeight-view.getHeight()){
+						params.y=winHeight-view.getHeight();
 					}
 					
 					mWM.updateViewLayout(view, params);
@@ -178,16 +183,13 @@ public class AddressService extends Service {
 					editor.putInt("lastY", params.y);
 					editor.commit();
 					break;
+				default:
+					break;
 				}
 				return true;
 			}
 		});
 		
-		TextView tView=(TextView) view.findViewById(R.id.tv_number);
-		
-		tView.setText(message);
-		tView.setTextColor(Color.RED);
-		mWM.addView(view, params);//将view添加到屏幕上
 	}
 	
 	@Override

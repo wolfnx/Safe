@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@id/tv_callSafeNumber"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:text="13612866035"
+        android:textColor="#000"
+        android:textSize="18sp" />
+
+    <TextView
+        android:id="@id/tv_callSafeMode"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tv_callSafeNumber"
+        android:layout_marginLeft="10dp"
+        android:paddingTop="10dp"
+        android:text="电话拦截"
+        android:textSize="10sp" />
+
+    <ImageView
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="10dp"
+        android:layout_centerVertical="true"
+        android:background="@drawable/ic_delete_btn"
+        />
+
+
+</RelativeLayout><!-- From: file:/D:/Develop/AndroidStudio/Safe/res/layout/items_call_safe.xml -->

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="cn.itcast.lost.activity.CallSafeActivity">
+
+    <TextView
+        style="@style/TitleStyle"
+        android:text="归属地查询" />
+
+    <include
+        android:id="@+id/list_view"
+        layout="@layout/list_view"></include>
+
+
+</LinearLayout>
+<!-- From: file:/D:/Develop/AndroidStudio/Safe/res/layout/activity_call_safe.xml -->
