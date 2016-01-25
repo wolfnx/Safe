@@ -2,4 +2,11 @@
 <resources>
     <item type="id" name="tv_callSafeNumber"/>
     <item type="id" name="tv_callSafeMode"/>
+    <item type="id" name="ll_pt"/>
+    <item type="id" name="bt_callSafePre"/>
+    <item type="id" name="bt_callSafeNext"/>
+    <item type="id" name="bt_callSafeBoot"/>
+    <item type="id" name="et_callSafeBoot"/>
+    <item type="id" name="tv_callSafeBoot"/>
+
 </resources>

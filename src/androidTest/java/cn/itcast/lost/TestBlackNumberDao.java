@@ -35,7 +35,7 @@ public class TestBlackNumberDao extends AndroidTestCase {
 
     public void testdelete(){
         BlackNumberDao dao=new BlackNumberDao(mConetext);
-        for(int i=0;i<100;i++){
+        for(int i=0;i<200;i++){
             Long number=13612866035L+i;
             dao.delete(number + "");
         }
