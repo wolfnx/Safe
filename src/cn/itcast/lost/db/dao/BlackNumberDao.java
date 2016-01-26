@@ -138,6 +138,29 @@ public class BlackNumberDao {
     }
 
     /**
+     *  分批加载
+     * @param startIndex 开始位置
+     * @param maxCount  每页展示最大的条目
+     * @return
+     */
+    public List<BlackNumberInfo> findPart(int startIndex,int maxCount){
+        SQLiteDatabase db=helper.getReadableDatabase();
+        Cursor cursor= db.rawQuery("select number,mode from blacknumber limit ? offset ?", new String[]{String.valueOf(maxCount), String.valueOf(startIndex)});
+        ArrayList<BlackNumberInfo> blackNumberInfos=new ArrayList<BlackNumberInfo>();
+        while (cursor.moveToNext()){
+            BlackNumberInfo blackNumberInfo=new BlackNumberInfo();
+            blackNumberInfo.setNumber(cursor.getString(0));
+            blackNumberInfo.setMode(cursor.getString(1));
+            blackNumberInfos.add(blackNumberInfo);
+        }
+        cursor.close();
+        db.close();
+        return blackNumberInfos;
+    }
+
+
+
+    /**
      * 获取总的记录数
      * @return
      */

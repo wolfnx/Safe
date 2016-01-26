@@ -4,9 +4,23 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <TextView
-        style="@style/TitleStyle"
-        android:text="黑名单管理" />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            style="@style/TitleStyle"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:text="黑名单管理" />
+        <Button
+            android:onClick="addBlackNumber"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:text="添加"/>
+
+    </RelativeLayout>
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -33,51 +47,5 @@
             android:id="@+id/list_view"
             layout="@layout/list_view"></include>
     </FrameLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <Button
-            android:id="@id/bt_callSafePre"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:onClick="callPre"
-            android:text="上一页"/>
-        <Button
-            android:id="@id/bt_callSafeBoot"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:onClick="callBoot"
-            android:text="跳转"/>
-        <EditText
-            android:id="@id/et_callSafeBoot"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:textSize="16sp"
-            android:text="1"/>
-        <TextView
-            android:id="@id/tv_callSafeBoot"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:layout_weight="1"
-            android:textSize="16sp"
-            android:text="1/10"/>
-        <Button
-            android:id="@id/bt_callSafeNext"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:onClick="callNext"
-            android:text="下一页"/>
-
-
-    </LinearLayout>
 
 </LinearLayout>

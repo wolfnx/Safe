@@ -8,5 +8,6 @@
     <item type="id" name="bt_callSafeBoot"/>
     <item type="id" name="et_callSafeBoot"/>
     <item type="id" name="tv_callSafeBoot"/>
-
+    <item type="id" name="iv_delete"/>
+    <item type="id" name="et_blackNumber"/>
 </resources>
