@@ -62,8 +62,9 @@ public class CallSafeActivity extends Activity {
             if(callSafeAdapter==null){
                 callSafeAdapter = new CallSafeAdapter(blackNumberInfos, CallSafeActivity.this);
                 listView.setAdapter(callSafeAdapter);
-            }
+            }else {
                 callSafeAdapter.notifyDataSetChanged();
+            }
         }
     };
 
@@ -115,9 +116,11 @@ public class CallSafeActivity extends Activity {
                     case AbsListView.OnScrollListener.SCROLL_STATE_IDLE:
                         //获取到最后一条显示的数据
                         int lastVisiblePosition = listView.getLastVisiblePosition();
-                        mStartIndex+=maxCount;
+
                         if(lastVisiblePosition==blackNumberInfos.size()-1){
                             mStartIndex+=maxCount;
+                            System.out.println(totalNumber);
+                            System.out.println(lastVisiblePosition);
                             if(lastVisiblePosition>totalNumber-2){
                                 ToastUtils.showToast(CallSafeActivity.this,"已经没有数据了");
                                 return;
