@@ -5,7 +5,7 @@
     android:versionName="1.0" >
 
     <uses-sdk
-        android:minSdkVersion="8"
+        android:minSdkVersion="16"
         android:targetSdkVersion="18" />
 
     <uses-permission android:name="android.permission.INTERNET" />
@@ -21,7 +21,6 @@
     <uses-permission android:name="android.permission.PROCESS_OUTGOING_CALLS" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
-
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
@@ -58,7 +57,9 @@
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
-        <receiver android:name="cn.itcast.lost.receiver.SmsReceiver" >
+        <receiver
+            android:name="cn.itcast.lost.receiver.SmsReceiver"
+            android:permission="android.permission.BROADCAST_SMS" >
             <intent-filter android:priority="2147483647" >
                 <action android:name="android.provider.Telephony.SMS_RECEIVED" />
             </intent-filter>
@@ -70,6 +71,17 @@
         <activity
             android:name="cn.itcast.lost.activity.CallSafeActivity"
             android:label="@string/title_activity_call_safe" >
+        </activity>
+
+        <service
+            android:name="cn.itcast.lost.service.CallSafeService"
+            android:enabled="true"
+            android:exported="true" >
+        </service>
+
+        <activity
+            android:name="cn.itcast.lost.activity.AppManagerActivity"
+            android:label="@string/title_activity_app_manager" >
         </activity>
     </application>
 

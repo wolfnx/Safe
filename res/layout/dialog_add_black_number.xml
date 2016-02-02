@@ -9,6 +9,7 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:text="添加黑名单"
+        android:background="#8866ff00"
         android:textSize="20sp"/>
     
     <EditText

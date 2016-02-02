@@ -26,6 +26,15 @@
 	    itcast:desc_on="归属地显示已开启"
 	    itcast:desc_off="归属地显示已关闭"
 	    />
+
+	<cn.itcast.lost.view.SettingItemView
+		android:id="@+id/siv_callSafe"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		itcast:title="黑名单的设置"
+		itcast:desc_on="黑名单已开启"
+		itcast:desc_off="黑名单已关闭"
+		/>
 	
 	<cn.itcast.lost.view.SettingClickView
 	    android:id="@+id/siv_addressStyle"

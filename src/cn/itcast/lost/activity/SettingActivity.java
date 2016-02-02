@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import cn.itcast.lost.service.AddressService;
+import cn.itcast.lost.service.CallSafeService;
 import cn.itcast.lost.utils.ServiceStatusUtils;
 import cn.itcast.lost.view.SettingClickView;
 import cn.itcast.lost.view.SettingItemView;
@@ -27,22 +28,53 @@ public class SettingActivity extends Activity {
 	private SettingItemView sivAddress;//设置归属地
 	private SettingClickView sivAddressStyle;//设置显示框的风格
 	private SettingClickView sivAddressLocation;//设置显示框的位置
+	private SettingItemView sivCallSafe;//设置黑名单
 	private SharedPreferences mPref;
-	private boolean serviceRunning;
 	final String [] items=new String[]{"半透明","活力橙","卫士蓝","金属灰","苹果绿"};
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_setting);
-		mPref = getSharedPreferences("lost",MODE_PRIVATE);
+		mPref = getSharedPreferences("lost", MODE_PRIVATE);
 
-		serviceRunning = ServiceStatusUtils.isServiceRunning(this,"cn.itcast.lost.service.AddressService");
 		autoUpdate();
 		initAddressView();
+		initCallSafeView();
 		initAddressStyle();
 		initAddressLocation();
 	}
+
+	/**
+	 * 初始化黑名单
+	 */
+	private void initCallSafeView() {
+
+		sivCallSafe=(SettingItemView) findViewById(R.id.siv_callSafe);
+
+		boolean serviceRunning = ServiceStatusUtils.isServiceRunning(this, "cn.itcast.lost.service.CallSafeService");
+
+		//根据服务是否开启来决定显示
+		if(serviceRunning){
+			sivCallSafe.setCheck(true);
+		}else{
+			sivCallSafe.setCheck(false);
+		}
+		sivCallSafe.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View view) {
+				if(sivCallSafe.isChecked()){
+					sivCallSafe.setCheck(false);
+					stopService(new Intent(SettingActivity.this,CallSafeService.class));//停止归属地服务
+				}else{
+					sivCallSafe.setCheck(true);
+					startService(new Intent(SettingActivity.this,CallSafeService.class));//开启归属地服务
+				}
+			}
+		});
+	}
+
 	/**
 	 * 自动更新升级开关
 	 */
@@ -85,6 +117,8 @@ public class SettingActivity extends Activity {
 	 */
 	private void initAddressView(){
 		sivAddress=(SettingItemView) findViewById(R.id.siv_address);
+
+		boolean serviceRunning = ServiceStatusUtils.isServiceRunning(this, "cn.itcast.lost.service.AddressService");
 
 		//根据服务是否开启来决定显示
 		if(serviceRunning){
@@ -144,7 +178,10 @@ public class SettingActivity extends Activity {
 		builder.setNegativeButton("取消", null);
 		builder.show();
 	}
-	
+
+	/**
+	 * 设置归属地提示框的位置
+	 */
 	private void initAddressLocation(){
 		
 		sivAddressLocation=(SettingClickView) findViewById(R.id.siv_addressLocation);

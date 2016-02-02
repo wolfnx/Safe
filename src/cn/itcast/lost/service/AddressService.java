@@ -21,7 +21,7 @@ import android.widget.TextView;
 import cn.itcast.lost.db.dao.AddressDao;
 import cn.itcast.safe.R;
 /**
- * 来电提醒
+ * 来去电提醒
  * @author wolfnx
  *
  */
