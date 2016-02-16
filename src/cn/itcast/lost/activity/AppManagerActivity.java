@@ -7,13 +7,16 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.text.format.Formatter;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.lidroid.xutils.ViewUtils;
@@ -34,6 +37,7 @@ public class AppManagerActivity extends Activity {
     private ArrayList<AppInfo> userAppInfos;
     private ArrayList<AppInfo> systemAppInfos;
     private LinearLayout ll_pt;
+    private PopupWindow popupWindow;
 
     @ViewInject(R.id.list_view)
     private ListView listView;
@@ -43,6 +47,7 @@ public class AppManagerActivity extends Activity {
     private TextView tvSD;
     @ViewInject(R.id.tv_app)
     private TextView tvApp;
+            ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -118,15 +123,50 @@ public class AppManagerActivity extends Activity {
              */
             @Override
             public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-               if(userAppInfos!=null&&systemAppInfos!=null){
-                   if(firstVisibleItem>userAppInfos.size()){
-                       //系统应用程序
-                       tvApp.setText("系统程序(" + systemAppInfos.size() + ")");
-                   }else{
-                       //用户应用程序
-                       tvApp.setText("用户程序(" + userAppInfos.size() + ")");
-                   }
-               }
+                if (userAppInfos != null && systemAppInfos != null) {
+                    if (firstVisibleItem > userAppInfos.size()) {
+                        //系统应用程序
+                        tvApp.setText("系统程序(" + systemAppInfos.size() + ")");
+                    } else {
+                        //用户应用程序
+                        tvApp.setText("用户程序(" + userAppInfos.size() + ")");
+                    }
+                }
+            }
+        });
+
+        //点击后显示:启动、分享、卸载
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            boolean showing=false;
+            PopupWindow popupWindow=null;
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                //获取当前的items对象
+                Object object = listView.getItemAtPosition(position);
+                if (object != null && object instanceof AppInfo) {
+                    View contentView = View.inflate(AppManagerActivity.this, R.layout.items_popup, null);
+
+                    if (showing) {
+                        System.out.println("yyyyyyyyyyyyyyyyyyyyyyyyyyy");
+                        popupWindow.dismiss();
+                    }
+
+                    //-2表示包裹内容
+                    popupWindow = new PopupWindow(contentView, ViewGroup.LayoutParams.WRAP_CONTENT, -2);
+
+                    System.out.println(popupWindow);
+
+                    int[] location = new int[2];
+                    //获取当前item的位置
+                    view.getLocationInWindow(location);
+                    //因为x轴是固定的所以给了70，y轴需要实时获取
+                    popupWindow.showAtLocation(parent, Gravity.LEFT + Gravity.TOP, 70, location[1]);
+
+                    showing = popupWindow.isShowing();
+                    System.out.println(showing);
+
+                }
             }
         });
 
