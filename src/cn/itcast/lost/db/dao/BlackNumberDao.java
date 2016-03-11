@@ -10,13 +10,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cn.itcast.lost.bean.BlackNumberInfo;
+import cn.itcast.lost.db.BlackNumberOpenHelper;
 
 /**
+ * 黑名单dao类
  * Created by wolfnx on 2016/1/22.
  */
 public class BlackNumberDao {
 
-    private  BlackNumberOpenHelper helper;
+    private BlackNumberOpenHelper helper;
     private Cursor cursor;
 
     public BlackNumberDao(Context mConetext) {

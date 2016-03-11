@@ -62,6 +62,31 @@
         <item name="android:layout_alignParentRight">true</item>
         <item name="android:onClick">next</item>
     </style>
+
+    <style name="widget_text">
+        <item name="android:textSize">16.0dip</item>
+        <item name="android:textColor">@color/textColorPrimaryDark</item>
+    </style>
+
+    <!--自定义的MyProgressBar,继承自系统的ProgressBar,意思是我想替换掉它-->
+    <style name="MyProgressBar" parent="android:Widget.ProgressBar">
+        <item name="android:indeterminateOnly">true</item>
+        <item name="android:indeterminateDrawable">@drawable/progress_medium_white</item>
+        <item name="android:indeterminateBehavior">repeat</item>
+        <item name="android:indeterminateDuration">3500</item>
+        <item name="android:minWidth">48dip</item>
+        <item name="android:maxWidth">48dip</item>
+        <item name="android:minHeight">48dip</item>
+        <item name="android:maxHeight">48dip</item>
+    </style>
+
+    <style name="MyHorizontalProgressBar" parent="android:Widget.ProgressBar.Horizontal">
+        <item name="android:indeterminateOnly">false</item>
+        <item name="android:progressDrawable">@drawable/progress_horizontal</item>
+        <item name="android:indeterminateDrawable">@android:drawable/progress_indeterminate_horizontal</item>
+        <item name="android:minHeight">20dip</item>
+        <item name="android:maxHeight">20dip</item>
+    </style>
     
 
 </resources>

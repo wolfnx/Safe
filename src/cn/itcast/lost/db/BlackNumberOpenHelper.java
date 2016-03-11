@@ -1,4 +1,4 @@
-package cn.itcast.lost.db.dao;
+package cn.itcast.lost.db;
 
 
 import android.content.Context;

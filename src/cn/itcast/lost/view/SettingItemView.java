@@ -23,6 +23,7 @@ public class SettingItemView extends RelativeLayout {
 	private String mTitle;
 	private String mDescon;
 	private String mDescoff;
+
 	public SettingItemView(Context context, AttributeSet attrs, int defStyle) {
 		super(context, attrs, defStyle);
 		initView();

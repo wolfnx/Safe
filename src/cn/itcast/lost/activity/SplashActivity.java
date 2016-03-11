@@ -21,6 +21,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -32,13 +33,20 @@ import android.view.animation.AlphaAnimation;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import cn.itcast.lost.bean.VirusInfo;
+import cn.itcast.lost.db.dao.AntivirusDao;
 import cn.itcast.lost.utils.StreamUtils;
 import cn.itcast.safe.R;
 
+import com.google.gson.Gson;
 import com.lidroid.xutils.HttpUtils;
 import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
+import com.lidroid.xutils.http.client.HttpRequest;
+
+import net.youmi.android.AdManager;
 
 public class SplashActivity extends Activity {
 
@@ -47,7 +55,7 @@ public class SplashActivity extends Activity {
 	protected static final int CODE_UPDATE_DIALOG = 1;
 	protected static final int CODE_URL_ERROR = 0;
 	protected static final int CODE_NET_ERROR = 3;
-	protected static final int CODE_JSON_EROOR = 4;
+	protected static final int CODE_JSON_ERROR = 4;
 	protected static final int CODE_ENTER_HOME = 5;//进入主页面
 	
 	private TextView tvVersion;
@@ -72,7 +80,7 @@ public class SplashActivity extends Activity {
 				Toast.makeText(SplashActivity.this, "网络错误", Toast.LENGTH_LONG).show();
 				enterHome();
 				break;
-			case CODE_JSON_EROOR:
+			case CODE_JSON_ERROR:
 				Toast.makeText(SplashActivity.this, "数据解析错误", Toast.LENGTH_LONG).show();
 				enterHome();
 				break;
@@ -89,6 +97,10 @@ public class SplashActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+
+		//有米广告的配置信息
+		AdManager.getInstance(this).init("aa2135c7efedd1e6","5d075c123d4fac29",false);
+
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.activity_splash);
 		tvVersion=(TextView) findViewById(R.id.tv_version);
@@ -100,6 +112,12 @@ public class SplashActivity extends Activity {
 		mPref = getSharedPreferences("lost",MODE_PRIVATE);
 		
 		copyDB("address.db");//拷贝归属地查询数据库
+		copyDB("antivirus.db");//拷贝病毒数据库
+
+		updateAntivirus();//更新病毒库
+
+        //创建快捷方式到桌面
+		createShortcut();
 		
 		//判断是否需要更新
 		boolean autoUpate = mPref.getBoolean("auto_update", true);
@@ -115,6 +133,80 @@ public class SplashActivity extends Activity {
 		AlphaAnimation anim=new AlphaAnimation(0.3f, 1f);
 		anim.setDuration(2000);
 		rlRoot.startAnimation(anim);
+	}
+
+	/**
+	 * 更新病毒库
+	 */
+	private void updateAntivirus() {
+
+        final AntivirusDao antivirusDao = new AntivirusDao();
+
+        //先检查联网
+        HttpUtils httpUtils = new HttpUtils();
+
+        String url="http://192.168.1.135/antivirus.json";//当前联网电脑的ip
+
+        httpUtils.send(HttpRequest.HttpMethod.GET, url, new RequestCallBack<String>() {
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+                System.out.println(responseInfo.result);
+                try {
+                    JSONObject jsonObject = new JSONObject(responseInfo.result);
+                   /**这是手动解析json，数据量小还好，一大就很麻烦，因此我们最好使用工具类谷歌的jar包
+                    * String md5 = jsonObject.getString("md5");
+                    *String desc = jsonObject.getString("desc");
+                    */
+                    Gson gson = new Gson();
+                    VirusInfo virusInfo = gson.fromJson(responseInfo.result, VirusInfo.class);
+                    antivirusDao.addUpdateAntivirus(virusInfo.md5, virusInfo.desc);
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(HttpException e, String s) {
+
+            }
+        });
+    }
+
+	/**
+	 * 创建桌面快捷方式
+	 */
+	private void createShortcut() {
+
+        Intent intent = new Intent();
+
+        intent.setAction("com.android.launcher.action.INSTALL_SHORTCUT");
+		//如果设置为true则可以重复创建快捷方式
+		intent.putExtra("duplicate",false);
+
+        /**
+         * 1.干什么事
+         * 2.叫什么名字
+         * 3.你长成什么样子
+         * <uses-permission android:name="com.android.launcher.permission.INSTALL_SHORTCUT"/>
+         */
+        //干什么事？创建快捷方式，此处需要加权限，将快捷方式装到桌面后，根本不知道
+		//this是什么所以不能用显示意图，要用隐示意图
+        //Intent shortcut_intent = new Intent(this,HomeActivity.class);这是显示意图
+		//在这里就需要在manifest中homeactivity中添加intentfilter
+		Intent shortcut_intent = new Intent();
+
+		shortcut_intent.setAction("shortcut.home");
+		shortcut_intent.addCategory("android.intent.category.DEFAULT");
+
+		intent.putExtra(Intent.EXTRA_SHORTCUT_INTENT,shortcut_intent);
+        //叫什么名字
+        intent.putExtra(Intent.EXTRA_SHORTCUT_NAME,"Safe");
+        //长什么样子
+        intent.putExtra(Intent.EXTRA_SHORTCUT_ICON, BitmapFactory.decodeResource(getResources(),R.drawable.ic_launcher));
+
+        //首先发送一个广播让系统接收到
+        sendBroadcast(intent);
 	}
 
 	public int getVersionCode(){
@@ -165,7 +257,7 @@ public class SplashActivity extends Activity {
 				System.out.println(msg);
 				HttpURLConnection conn=null;
 				try {
-					URL url = new URL("http://10.0.2.2:8080/update.json");
+					URL url = new URL("http://10.0.2.2/update.json");
 					conn=(HttpURLConnection) url.openConnection();
 					conn.setRequestMethod("GET");
 					conn.setReadTimeout(5000);
@@ -201,7 +293,7 @@ public class SplashActivity extends Activity {
 					msg.what=CODE_NET_ERROR;
 					e.printStackTrace();
 				} catch (JSONException e) {
-					msg.what=CODE_JSON_EROOR;
+					msg.what=CODE_JSON_ERROR;
 					e.printStackTrace();
 				}finally{
 					long endTime=System.currentTimeMillis();//网络连接完成时间

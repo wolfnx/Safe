@@ -28,6 +28,15 @@
 	    />
 
 	<cn.itcast.lost.view.SettingItemView
+		android:id="@+id/siv_watchDog"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		itcast:title="看门狗的设置"
+		itcast:desc_on="看门狗已开启"
+		itcast:desc_off="看门狗已关闭"
+		/>
+
+	<cn.itcast.lost.view.SettingItemView
 		android:id="@+id/siv_callSafe"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
@@ -47,5 +56,5 @@
 	    android:layout_width="match_parent"
 	    android:layout_height="wrap_content"
 	    />
-	
+
 </LinearLayout>

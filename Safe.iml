@@ -33,13 +33,13 @@
       <sourceFolder url="file://$MODULE_DIR$/build/generated/source/buildConfig/debug" isTestSource="false" generated="true" />
       <sourceFolder url="file://$MODULE_DIR$/build/generated/source/rs/debug" isTestSource="false" generated="true" />
       <sourceFolder url="file://$MODULE_DIR$/build/generated/res/rs/debug" type="java-resource" />
-      <sourceFolder url="file://$MODULE_DIR$/build/generated/res/generated/debug" type="java-resource" />
+      <sourceFolder url="file://$MODULE_DIR$/build/generated/res/resValues/debug" type="java-resource" />
       <sourceFolder url="file://$MODULE_DIR$/build/generated/source/r/androidTest/debug" isTestSource="true" generated="true" />
       <sourceFolder url="file://$MODULE_DIR$/build/generated/source/aidl/androidTest/debug" isTestSource="true" generated="true" />
       <sourceFolder url="file://$MODULE_DIR$/build/generated/source/buildConfig/androidTest/debug" isTestSource="true" generated="true" />
       <sourceFolder url="file://$MODULE_DIR$/build/generated/source/rs/androidTest/debug" isTestSource="true" generated="true" />
       <sourceFolder url="file://$MODULE_DIR$/build/generated/res/rs/androidTest/debug" type="java-test-resource" />
-      <sourceFolder url="file://$MODULE_DIR$/build/generated/res/generated/androidTest/debug" type="java-test-resource" />
+      <sourceFolder url="file://$MODULE_DIR$/build/generated/res/resValues/androidTest/debug" type="java-test-resource" />
       <sourceFolder url="file://$MODULE_DIR$/build-types/debug/res" type="java-resource" />
       <sourceFolder url="file://$MODULE_DIR$/build-types/debug/resources" type="java-resource" />
       <sourceFolder url="file://$MODULE_DIR$/build-types/debug/assets" type="java-resource" />
@@ -83,7 +83,10 @@
     </content>
     <orderEntry type="jdk" jdkName="Android API 23 Platform" jdkType="Android SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" exported="" name="android-support-v4" level="project" />
+    <orderEntry type="library" exported="" name="gson-2.2.4" level="project" />
     <orderEntry type="library" exported="" name="xUtils-2.6.14" level="project" />
+    <orderEntry type="library" exported="" name="YoumiSdk_v6.1.0_2016-02-26" level="project" />
+    <orderEntry type="library" exported="" name="android-support-v4" level="project" />
+    <orderEntry type="library" exported="" name="org.apache.http.legacy-android-23" level="project" />
   </component>
 </module>

@@ -3,6 +3,7 @@ package cn.itcast.lost.bean;
 import android.graphics.drawable.Drawable;
 
 /**
+ * 安裝程序類
  * Created by wolfnx on 2016/1/31.
  */
 public class AppInfo {

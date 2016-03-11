@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import cn.itcast.lost.service.AddressService;
 import cn.itcast.lost.service.CallSafeService;
+import cn.itcast.lost.service.WatchDogService;
 import cn.itcast.lost.utils.ServiceStatusUtils;
 import cn.itcast.lost.view.SettingClickView;
 import cn.itcast.lost.view.SettingItemView;
@@ -29,6 +30,8 @@ public class SettingActivity extends Activity {
 	private SettingClickView sivAddressStyle;//设置显示框的风格
 	private SettingClickView sivAddressLocation;//设置显示框的位置
 	private SettingItemView sivCallSafe;//设置黑名单
+	private SettingItemView sivWatchDog;
+
 	private SharedPreferences mPref;
 	final String [] items=new String[]{"半透明","活力橙","卫士蓝","金属灰","苹果绿"};
 
@@ -43,6 +46,7 @@ public class SettingActivity extends Activity {
 		initCallSafeView();
 		initAddressStyle();
 		initAddressLocation();
+		watchDog();
 	}
 
 	/**
@@ -97,12 +101,12 @@ public class SettingActivity extends Activity {
 
 			@Override
 			public void onClick(View v) {
-				if(sivUpdate.isChecked()){
+				if (sivUpdate.isChecked()) {
 					sivUpdate.setCheck(false);
 					//sivUpdate.setDesc("自动更新已关闭");
 					//更新sp
-					mPref.edit().putBoolean("auto_update",false).commit();
-				}else{
+					mPref.edit().putBoolean("auto_update", false).commit();
+				} else {
 					sivUpdate.setCheck(true);
 					//sivUpdate.setDesc("自动更新已开启");
 					mPref.edit().putBoolean("auto_update", true).commit();
@@ -132,10 +136,40 @@ public class SettingActivity extends Activity {
 			public void onClick(View view) {
 				if(sivAddress.isChecked()){
 					sivAddress.setCheck(false);
-					stopService(new Intent(SettingActivity.this,AddressService.class));//停止归属地服务
+					stopService(new Intent(SettingActivity.this, AddressService.class));//停止归属地服务
 				}else{
 					sivAddress.setCheck(true);
-					startService(new Intent(SettingActivity.this,AddressService.class));//开启归属地服务
+					startService(new Intent(SettingActivity.this, AddressService.class));//开启归属地服务
+				}
+			}
+		});
+	}
+
+	/**
+	 * 开启开门狗
+	 */
+	private void watchDog(){
+
+		sivWatchDog=(SettingItemView) findViewById(R.id.siv_watchDog);
+
+		boolean serviceRunning = ServiceStatusUtils.isServiceRunning(this, "cn.itcast.lost.service.WatchDogService");
+
+		//根据服务是否开启来决定显示
+		if(serviceRunning){
+			sivWatchDog.setCheck(true);
+		}else{
+			sivWatchDog.setCheck(false);
+		}
+		sivWatchDog.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View view) {
+				if(sivWatchDog.isChecked()){
+					sivWatchDog.setCheck(false);
+					stopService(new Intent(SettingActivity.this,WatchDogService.class));//停止看门狗
+				}else{
+					sivWatchDog.setCheck(true);
+					startService(new Intent(SettingActivity.this,WatchDogService.class));//开启看门狗
 				}
 			}
 		});
@@ -144,7 +178,7 @@ public class SettingActivity extends Activity {
 	private void initAddressStyle(){
 		sivAddressStyle=(SettingClickView) findViewById(R.id.siv_addressStyle);
 		sivAddressStyle.setTitle("归属地提示框风格");
-		int style=mPref.getInt("addressStyle",0);	
+		int style=mPref.getInt("addressStyle", 0);
 		
 		sivAddressStyle.setDesc(items[style]);
 		sivAddressStyle.setOnClickListener(new OnClickListener() {

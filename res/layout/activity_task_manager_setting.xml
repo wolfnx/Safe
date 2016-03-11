@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="cn.itcast.lost.activity.TaskManagerSettingActivity">
+
+    <LinearLayout
+        android:id="@+id/ll_ls"
+        android:layout_centerHorizontal="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/ll_clear"
+        android:orientation="horizontal">
+
+        <CheckBox
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/cb_viewSystem"
+            android:focusable="false"
+            android:clickable="false"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="显示系统进程"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_clear"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
+        >
+
+        <CheckBox
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:focusable="false"
+            android:clickable="false"
+            android:id="@+id/cb_clear" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="定时清理进程"
+            android:id="@+id/textView" />
+
+    </LinearLayout>
+
+</RelativeLayout>
